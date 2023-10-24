@@ -1,0 +1,159 @@
+{% load custom %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Informações do Artista</title>
+    <link rel="stylesheet" type="text/css" href="static\css\styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>MusicR</h1>
+    </header>
+
+    <main>
+        <form method="post">
+            {% csrf_token %}
+            <div class="search-input">
+                <input type="text" name="artist_name" placeholder="Pesquise o artista aqui..." />
+            </div>
+            <div class="search-button">
+                <button type="submit">Buscar</button>
+            </div>
+        </form>
+
+        {% if artist_data %}
+        <div class="artist-header">
+            <div class="artist-info">
+                <img src="{{ artist_data.image_url }}" alt="{{ artist_data.name }}" />
+                <h3>{{ artist_data.name }}</h3>
+                <p>{{ artist_data.bio }}</p>
+            </div>
+        </div>
+
+        <h2 class="centered-heading">Álbuns:</h2>
+        <ul class="album-list">
+            {% for album in artist_data.albums %}
+            <li class="album">
+                <img src="{{ album.image_url }}" alt="{{ album.name }}" />
+                <div class="album-details">
+                    <div class="album-title">{{ album.name }}</div>
+                    <p>Data de Lançamento: {{ album.release_date }}</p>
+                    <button class="album-toggle">Ver Detalhes</button>
+                </div>
+                <ul class="album-tracks">
+                    <h3>Lista de Músicas</h3>
+                    <li class="playlist-header">
+                        <span class="playlist-number">#</span>
+                        <span class="playlist-title">Título</span>
+                        <span class="playlist-duration">Duração</span>
+                        <span class="playlist-action">
+                    </li>
+                    {% for music in album.tracks %}
+                    <li class="playlist-item music-item">
+                        <span class="playlist-number">{{ forloop.counter }}</span>
+                        <span class="playlist-title">{{ music.name }}</span>
+                        <span class="playlist-duration">{{ music.duration|ms_to_minutes_and_seconds }}</span>
+                        <span class="playlist-action">
+                            <div class="dropdown">
+                                <span class="ellipsis">...</span>
+                                <div class="dropdown-content">
+                                    <a href="#">To listen</a>
+                                    <a href="#">Listened</a>
+                                </div>
+                            </div>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
+    </main>
+
+    <script>
+        var albumToggles = document.querySelectorAll('.album-toggle');
+        albumToggles.forEach(function(toggle) {
+            var albumTracks = toggle.closest('.album').querySelector('.album-tracks'); // Seleciona o elemento .album-tracks dentro do mesmo .album
+
+            // Inicialmente, esconda as faixas
+            albumTracks.style.display = 'none';
+
+            toggle.addEventListener('click', function() {
+                if (albumTracks.style.display === 'block') {
+                    albumTracks.style.display = 'none';
+                } else {
+                    albumTracks.style.display = 'block';
+                }
+            });
+        });
+
+        // Selecione a foto do artista
+        var artistImage = document.querySelector('.artist-info img');
+        // Adicione um ouvinte de evento de rolagem à janela
+
+        window.addEventListener('scroll', function() {
+        // Obtenha a posição vertical atual da página
+
+        var scrollPosition = window.scrollY;
+        // Ajuste a opacidade da imagem com base na posição de rolagem
+
+        var opacity = 1 - (scrollPosition / 500); // 500 é o valor a partir do qual a foto desaparece completamente
+
+        // Aplique a opacidade à imagem
+        artistImage.style.opacity = opacity;
+        });
+
+        // Selecionar o formulário e o botão "Buscar"
+        var searchForm = document.querySelector('form');
+        var searchButton = document.querySelector('.search-button');
+
+        // Obter a posição vertical atual da página
+        var lastScrollPosition = window.scrollY;
+
+        window.addEventListener('scroll', function() {
+            var currentScrollPosition = window.scrollY;
+
+            if (currentScrollPosition < lastScrollPosition) {
+                // Rolando para cima - mostrar o formulário e o botão "Buscar"
+                searchForm.style.display = 'block';
+                searchButton.style.display = 'block';
+            }
+
+            lastScrollPosition = currentScrollPosition;
+        });
+    </script>
+    <script>
+        // JavaScript para o menu suspenso
+        var ellipses = document.querySelectorAll('.ellipsis');
+
+        ellipses.forEach(function(ellipsis) {
+            ellipsis.addEventListener('click', function() {
+                var dropdownContent = this.nextElementSibling;
+                if (dropdownContent.style.display === 'block' && !this.parentElement.classList.contains('no-dropdown')) {
+                    dropdownContent.style.display = 'none';
+                } else if (!this.parentElement.classList.contains('no-dropdown')) {
+                    dropdownContent.style.display = 'block';
+                }
+            });
+        });
+
+        // Fechar o menu suspenso quando clicar em qualquer outro lugar na página
+        window.onclick = function(event) {
+            if (!event.target.matches('.ellipsis')) {
+                var dropdowns = document.getElementsByClassName('dropdown-content');
+                dropdowns.forEach(function(dropdown) {
+                    dropdown.style.display = 'none';
+                });
+            }
+        };
+    </script>
+</body>
+</html>

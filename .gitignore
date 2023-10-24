@@ -1,0 +1,10 @@
+.venv
+.env
+.idea
+*.sqlite3
+*pyc
+__pycache__
+.vscode
+staticfiles
+.ipynb_checkpoints/
+.cache
