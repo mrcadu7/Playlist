@@ -1,6 +1,7 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from datetime import datetime
+from core.models.music import Album, Artist
 
 
 def parse_release_date(date_str):
@@ -49,6 +50,8 @@ def get_artist_info(artist_name):
                     "name": track['name'],
                     "track_id": track['id'],
                     "duration": duration,
+                    "album_name": album['name'],  # Adicione o nome do álbum
+                    "artist_name": artist['name'],  # Adicione o nome do artista
                 }
                 album_info["tracks"].append(track_info)
 
@@ -57,3 +60,31 @@ def get_artist_info(artist_name):
         return artist_info
     else:
         return None
+
+
+def get_track_info(track_id):
+    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+    track = spotify.track(track_id)
+
+    track_info = {
+        'name': track['name'],
+        'duration': track['duration_ms'],
+        'album_name': track['album']['name'],
+        'artist_name': ', '.join([artist['name'] for artist in track['artists']])
+    }
+
+    return track_info
+
+
+def get_or_create_album(album_name, artist_name):
+    artist, created = Artist.objects.get_or_create(name=artist_name)
+    album, created = Album.objects.get_or_create(title=album_name, artist=artist)
+
+    return album
+
+
+def ms_to_min_sec(ms):
+    total_seconds = ms / 1000
+    minutes = int(total_seconds // 60)
+    seconds = int(total_seconds % 60)
+    return f"{minutes}:{seconds:02d}"

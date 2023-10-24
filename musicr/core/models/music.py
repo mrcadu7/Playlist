@@ -18,7 +18,7 @@ class Artist(models.Model):
 class Album(models.Model):
     title = models.CharField(max_length=64)
     artist = models.ForeignKey(Artist, related_name='albums', on_delete=models.CASCADE)
-    year = models.IntegerField()
+    year = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -31,10 +31,11 @@ class Album(models.Model):
     
 
 class Song(models.Model):
-    spotify_id = models.CharField(max_length=64, unique=True)
+    spotify_id = models.CharField(max_length=200, unique=True)
     album = models.ForeignKey(Album, related_name='songs', on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
     genre = models.CharField(max_length=64)
+    duration = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

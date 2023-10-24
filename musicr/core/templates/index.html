@@ -57,13 +57,11 @@
                         <span class="playlist-title">{{ music.name }}</span>
                         <span class="playlist-duration">{{ music.duration|ms_to_minutes_and_seconds }}</span>
                         <span class="playlist-action">
-                            <div class="dropdown">
-                                <span class="ellipsis">...</span>
-                                <div class="dropdown-content">
-                                    <a href="#">To listen</a>
-                                    <a href="#">Listened</a>
-                                </div>
-                            </div>
+                            <form method="post" action="{% url 'add_to_playlist' %}">
+                                {% csrf_token %}
+                                {{ music.form }}
+                                <button type="submit">Adicionar à playlist</button>
+                            </form>
                         </span>
                     </li>
                     {% endfor %}
