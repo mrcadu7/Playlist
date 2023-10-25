@@ -56,7 +56,9 @@ def add_to_playlist(request):
                 'album': get_or_create_album(track_info['album_name'], track_info['artist_name']),
             }
         )
-            # Crie um novo objeto Addition com a música e a playlist
-            addition = Addition.objects.create(song=song, playlist=playlist)
+            # Verifique se a música já está na playlist
+            if not Addition.objects.filter(song=song, playlist=playlist).exists():
+                # Crie um novo objeto Addition com a música e a playlist
+                addition = Addition.objects.create(song=song, playlist=playlist)
 
     return redirect('index')
