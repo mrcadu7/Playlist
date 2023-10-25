@@ -60,7 +60,8 @@
                             <form method="post" action="{% url 'add_to_playlist' %}">
                                 {% csrf_token %}
                                 {{ music.form }}
-                                <button type="submit">Adicionar à playlist</button>
+                                <button type="button" class="add-to-playlist-button">Adicionar à playlist</button>
+                                <div class="message-container" style="color: green;"></div>
                             </form>
                         </span>
                     </li>
@@ -152,6 +153,66 @@
                 });
             }
         };
+    </script>
+    <script>
+        // JavaScript para adicionar à playlist
+        var addToPlaylistButtons = document.querySelectorAll('.add-to-playlist-button');
+        
+        addToPlaylistButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                var form = this.closest('form'); // Encontra o formulário mais próximo
+                var formData = new FormData(form); // Coleta os dados do formulário
+                var url = form.getAttribute('action'); // Obtém a URL de ação do formulário
+
+                // Envie uma solicitação POST AJAX
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', url);
+                xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken')); // Configure o token CSRF
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            // A solicitação foi bem-sucedida, faça qualquer manipulação de resposta aqui
+                            // Por exemplo, atualize o DOM se necessário
+                            var response = JSON.parse(xhr.responseText);
+                            var messageContainer = form.querySelector('.message-container');
+                            
+                            if (response.success) {
+                                messageContainer.style.color = 'green';
+                            } else {
+                                messageContainer.style.color = 'red';
+                            }
+                            messageContainer.innerHTML = response.message;
+
+                        } else {
+                            // A solicitação falhou, você pode lidar com isso aqui
+                        }
+                    }
+                };
+
+                xhr.send(formData); // Envie os dados do formulário
+
+                // Evite que o formulário seja enviado tradicionalmente
+                event.preventDefault();
+            });
+        });
+
+        // Função para obter o token CSRF
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
     </script>
 </body>
 </html>

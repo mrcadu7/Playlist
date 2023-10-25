@@ -4,6 +4,7 @@ from django import forms
 from core.models.playlist import Playlists, Addition
 from core.models.music import Song
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 
 
 class ArtistNameForm(forms.Form):
@@ -60,5 +61,8 @@ def add_to_playlist(request):
             if not Addition.objects.filter(song=song, playlist=playlist).exists():
                 # Crie um novo objeto Addition com a música e a playlist
                 addition = Addition.objects.create(song=song, playlist=playlist)
+                return JsonResponse({'success': True, 'message': 'Música adicionada com sucesso'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Música já existe na playlist'})
 
-    return redirect('index')
+    return JsonResponse({'message': 'Erro na solicitação AJAX'}, status=400)
