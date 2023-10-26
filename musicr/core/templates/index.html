@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <header>
@@ -17,13 +18,16 @@
         <form method="post">
             {% csrf_token %}
             <div class="search-input">
-                <input type="text" name="artist_name" placeholder="Pesquise o artista aqui..." />
+                <input type="text" name="artist_name" list="artist-list" placeholder="Pesquise o artista aqui..." />
+                <datalist id="artist-list"></datalist>
             </div>
             <div class="search-button">
                 <button type="submit">Buscar</button>
             </div>
         </form>
-
+        <div class="loading" style="display: none;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif?20140201131911" alt="Carregando..." />
+        </div>
         {% if artist_data %}
         <div class="artist-header">
             <div class="artist-info">
@@ -77,6 +81,39 @@
         {% endif %}
     </main>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+    $('input[name="artist_name"]').on('input', function(){
+        var query = $(this).val();
+        if(query.length > 2){
+        $.ajax({
+            url: '/search_artists/',
+            data: {
+            'q': query
+            },
+            dataType: 'json',
+            success: function(data){
+            var datalist = $("#artist-list");
+            datalist.empty(); // remove as opções antigas
+            data.forEach(function(item){
+                // adicione cada artista como uma nova opção no datalist
+                datalist.append($("<option>").attr('value', item.name));
+            });
+            }
+        });
+        }
+    });
+    });
+
+    $(document).ready(function() {
+        $('form').on('submit', function() {
+            // Mostra o ícone de carregamento
+            $('.loading').show();
+        });
+    });
+    </script>
+    
     <script>
         var albumToggles = document.querySelectorAll('.album-toggle');
         albumToggles.forEach(function(toggle) {

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from api.spotify_api import get_artist_info, get_track_info, get_or_create_album
+from api.spotify_api import get_artist_info, get_track_info, get_or_create_album, search_artists
 from django import forms
 from core.models.playlist import Playlists, Addition
 from core.models.music import Song
@@ -14,6 +14,14 @@ class ArtistNameForm(forms.Form):
 class AddToPlaylistForm(forms.Form):
     playlist = forms.ModelChoiceField(queryset=Playlists.objects.all())
     spotify_id = forms.CharField(widget=forms.HiddenInput())
+
+
+def autocomplete(request):
+    if 'term' in request.GET:
+        artists = search_artists(request.GET.get('term'))
+        names = [artist['name'] for artist in artists]
+        return JsonResponse(names, safe=False)
+    return render(request, 'index.html')
 
 
 def index(request):

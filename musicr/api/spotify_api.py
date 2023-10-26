@@ -2,6 +2,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from datetime import datetime
 from core.models.music import Album, Artist
+from django.http import JsonResponse
 
 
 def parse_release_date(date_str):
@@ -15,6 +16,21 @@ def parse_release_date(date_str):
         except ValueError:
             # Se ainda falhar, vai tomar no cu
             return None
+
+
+def search_artists(request):
+    artist_name = request.GET.get('q', '')
+    limit = 10
+    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+    results = spotify.search(q='artist:' + artist_name, type='artist', limit=limit)
+    artists = []
+    if results['artists']['items']:
+        for artist in results['artists']['items']:
+            artist_info = {
+                "name": artist['name'],
+            }
+            artists.append(artist_info)
+    return JsonResponse(artists, safe=False)
 
 
 def get_artist_info(artist_name):
@@ -31,8 +47,8 @@ def get_artist_info(artist_name):
             "image_url": artist['images'][0]['url'],
             "albums": [],
         }
-
-        albums = spotify.artist_albums(artist['id'], album_type='album')
+        
+        albums = spotify.artist_albums(artist['id'], album_type='album', limit=50)
 
         for album in albums['items']:
             album_info = {
