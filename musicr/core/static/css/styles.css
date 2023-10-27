@@ -17,6 +17,26 @@ header {
   font-weight: 800;
 }
 
+.container {
+  display: flex;
+}
+
+.navbar {
+  position: fixed;
+  top: 150px;  /* Ajuste este valor para mover a navbar para baixo */
+  left: 10px;
+  height: calc(100% - 60px);  /* Subtrai a altura do cabeçalho da altura da navbar */
+  overflow: auto;
+}
+
+.navbar a {
+  display: block;
+  text-decoration: none;
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
 main {
   max-width: 800px;
   margin: 0 auto;

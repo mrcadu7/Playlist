@@ -27,6 +27,7 @@ def autocomplete(request):
 def index(request):
     artist_data = None
     message = None
+    playlists = Playlists.objects.all()
 
     if request.method == 'POST':
         form = ArtistNameForm(request.POST)
@@ -44,7 +45,10 @@ def index(request):
     else:
         form = ArtistNameForm()
 
-    return render(request, 'index.html', {'artist_data': artist_data, 'form': form, 'message': message})
+    return render(request, 'index.html', {'artist_data': artist_data,
+                                          'form': form,
+                                          'message': message,
+                                          'playlists': playlists})
 
 
 def add_to_playlist(request):
@@ -74,3 +78,21 @@ def add_to_playlist(request):
                 return JsonResponse({'success': False, 'message': 'Música já existe na playlist'})
 
     return JsonResponse({'message': 'Erro na solicitação AJAX'}, status=400)
+
+
+def view_playlist(request, playlist_id):
+    playlist = Playlists.objects.get(id=playlist_id)
+    additions = Addition.objects.filter(playlist=playlist)
+    songs = [addition.song for addition in additions]
+    playlists = Playlists.objects.all()
+    return render(request, 'view_playlist.html', {'songs': songs, 'playlist': playlist, 'playlists': playlists})
+
+def list_playlists(request):
+    playlists = Playlists.objects.all()
+    playlist_songs = {}
+    for playlist in playlists:
+        additions = Addition.objects.filter(playlist=playlist)
+        songs = [addition.song for addition in additions]
+        playlist_songs[playlist.title] = songs
+    return render(request, 'list_playlists.html', {'playlist_songs': playlist_songs})
+

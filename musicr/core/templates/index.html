@@ -11,76 +11,82 @@
 </head>
 <body>
     <header>
-        <h1>MusicR</h1>
+        <h1><a href="{% url 'index' %}" style="color: inherit; text-decoration: none;">MusicR</a></h1>
     </header>
-
-    <main>
-        <form method="post">
-            {% csrf_token %}
-            <div class="search-input">
-                <input type="text" name="artist_name" list="artist-list" placeholder="Pesquise o artista aqui..." />
-                <datalist id="artist-list"></datalist>
-            </div>
-            <div class="search-button">
-                <button type="submit">Buscar</button>
-            </div>
-        </form>
-        <div class="loading" style="display: none;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif?20140201131911" alt="Carregando..." />
-        </div>
-        {% if artist_data %}
-        <div class="artist-header">
-            <div class="artist-info">
-                <img src="{{ artist_data.image_url }}" alt="{{ artist_data.name }}" />
-                <h3>{{ artist_data.name }}</h3>
-                <p>{{ artist_data.bio }}</p>
-            </div>
-        </div>
-
-        <h2 class="centered-heading">Álbuns:</h2>
-        <ul class="album-list">
-            {% for album in artist_data.albums %}
-            <li class="album">
-                <img src="{{ album.image_url }}" alt="{{ album.name }}" />
-                <div class="album-details">
-                    <div class="album-title">{{ album.name }}</div>
-                    <p>Data de Lançamento: {{ album.release_date }}</p>
-                    <button class="album-toggle">Ver Detalhes</button>
-                </div>
-                <ul class="album-tracks">
-                    <h3>Lista de Músicas</h3>
-                    <li class="playlist-header">
-                        <span class="playlist-number">#</span>
-                        <span class="playlist-title">Título</span>
-                        <span class="playlist-duration">Duração</span>
-                        <span class="playlist-action">
-                    </li>
-                    {% for music in album.tracks %}
-                    <li class="playlist-item music-item">
-                        <span class="playlist-number">{{ forloop.counter }}</span>
-                        <span class="playlist-title">{{ music.name }}</span>
-                        <span class="playlist-duration">{{ music.duration|ms_to_minutes_and_seconds }}</span>
-                        <span class="playlist-action">
-                            <form method="post" action="{% url 'add_to_playlist' %}">
-                                {% csrf_token %}
-                                {{ music.form }}
-                                <button type="button" class="add-to-playlist-button">Adicionar à playlist</button>
-                                <div class="message-container" style="color: green;"></div>
-                            </form>
-                        </span>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </li>
+    <div class="container">
+        <nav class="navbar">
+            <h2>Playlists:</h2>
+            {% for playlist in playlists %}
+                <a href="{% url 'view_playlist' playlist.id %}">{{ playlist.title }}</a>
             {% endfor %}
-        </ul>
-        {% endif %}
+        </nav>
+        <main>
+            <form method="post">
+                {% csrf_token %}
+                <div class="search-input">
+                    <input type="text" name="artist_name" list="artist-list" placeholder="Pesquise o artista aqui..." />
+                    <datalist id="artist-list"></datalist>
+                </div>
+                <div class="search-button">
+                    <button type="submit">Buscar</button>
+                </div>
+            </form>
+            <div class="loading" style="display: none;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif?20140201131911" alt="Carregando..." />
+            </div>
+            {% if artist_data %}
+            <div class="artist-header">
+                <div class="artist-info">
+                    <img src="{{ artist_data.image_url }}" alt="{{ artist_data.name }}" />
+                    <h3>{{ artist_data.name }}</h3>
+                    <p>{{ artist_data.bio }}</p>
+                </div>
+            </div>
 
-        {% if message %}
-            <p>{{ message }}</p>
-        {% endif %}
-    </main>
+            <h2 class="centered-heading">Álbuns:</h2>
+            <ul class="album-list">
+                {% for album in artist_data.albums %}
+                <li class="album">
+                    <img src="{{ album.image_url }}" alt="{{ album.name }}" />
+                    <div class="album-details">
+                        <div class="album-title">{{ album.name }}</div>
+                        <p>Data de Lançamento: {{ album.release_date }}</p>
+                        <button class="album-toggle">Ver Detalhes</button>
+                    </div>
+                    <ul class="album-tracks">
+                        <h3>Lista de Músicas</h3>
+                        <li class="playlist-header">
+                            <span class="playlist-number">#</span>
+                            <span class="playlist-title">Título</span>
+                            <span class="playlist-duration">Duração</span>
+                            <span class="playlist-action">
+                        </li>
+                        {% for music in album.tracks %}
+                        <li class="playlist-item music-item">
+                            <span class="playlist-number">{{ forloop.counter }}</span>
+                            <span class="playlist-title">{{ music.name }}</span>
+                            <span class="playlist-duration">{{ music.duration|ms_to_minutes_and_seconds }}</span>
+                            <span class="playlist-action">
+                                <form method="post" action="{% url 'add_to_playlist' %}">
+                                    {% csrf_token %}
+                                    {{ music.form }}
+                                    <button type="button" class="add-to-playlist-button">Adicionar à playlist</button>
+                                    <div class="message-container" style="color: green;"></div>
+                                </form>
+                            </span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
 
+            {% if message %}
+                <p>{{ message }}</p>
+            {% endif %}
+        </main>
+    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
     $(document).ready(function(){

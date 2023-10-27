@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listar Playlists</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
+    <h1><a href="{% url 'index' %}" style="color: inherit; text-decoration: none;">MusicR</a></h1>
+</head>
+<body>
+    <h2>Playlists</h2>
+    {% for title, songs in playlist_songs.items %}
+        <h3>{{ title }}</h3>
+        <ul>
+            {% for song in songs %}
+            <li>{{ song.name }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualizar Playlist</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+      <h1><a href="{% url 'index' %}" style="color: inherit; text-decoration: none;">MusicR</a></h1>
+    </header>
+    <div class="container">
+      <nav class="navbar">
+          <h2>Playlists:</h2>
+          {% for playlist in playlists %}
+              <a href="{% url 'view_playlist' playlist.id %}">{{ playlist.title }}</a>
+          {% endfor %}
+      </nav>
+    </div>
+    <div class="container">
+        <main>
+            <h2>{{ playlist.title }}</h2>
+            <ul>
+                {% for song in songs %}
+                <li>{{ song.name }}</li>
+                {% endfor %}
+            </ul>
+        </main>
+    </div>
+</body>
+</html>
