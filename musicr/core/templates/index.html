@@ -1,4 +1,5 @@
 {% load custom %}
+{% load socialaccount %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,17 +8,33 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
-
+    {% providers_media_js %}
 </head>
 <body>
     <header>
         <h1><a href="{% url 'index' %}" style="color: inherit; text-decoration: none;">MusicR</a></h1>
+        <style>
+            .login-form {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                width: 300px;
+            }
+        </style>
+        
+        <div class="login-form">
+            <h2>Login</h2>
+            {% include "account/login.html" %}
+        </div>
     </header>
     <div class="container">
         <nav class="navbar">
             <h2>Playlists:</h2>
             {% for playlist in playlists %}
+                <!-- Verifique se a playlist pertence ao usuário -->
+                {% if user == playlist.user %}
                 <a href="{% url 'view_playlist' playlist.id %}">{{ playlist.title }}</a>
+                {% endif %}
             {% endfor %}
         </nav>
         <main>
@@ -87,6 +104,8 @@
             {% endif %}
         </main>
     </div>
+</body>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
     $(document).ready(function(){

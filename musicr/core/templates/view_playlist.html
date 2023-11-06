@@ -16,7 +16,10 @@
       <nav class="navbar">
           <h2>Playlists:</h2>
           {% for playlist in playlists %}
+              <!-- Verifique se a playlist pertence ao usuário -->
+              {% if user == playlist.user %}
               <a href="{% url 'view_playlist' playlist.id %}">{{ playlist.title }}</a>
+              {% endif %}
           {% endfor %}
       </nav>
     </div>

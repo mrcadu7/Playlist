@@ -11,13 +11,16 @@
 </head>
 <body>
     <h2>Playlists</h2>
-    {% for title, songs in playlist_songs.items %}
-        <h3>{{ title }}</h3>
+    {% for playlist, songs in playlist_songs.items %}
+        <!-- Verifique se a playlist pertence ao usuário -->
+        {% if user == playlist.user %}
+        <h3>{{ playlist.title }}</h3>
         <ul>
             {% for song in songs %}
             <li>{{ song.name }}</li>
             {% endfor %}
         </ul>
+        {% endif %}
     {% endfor %}
 </body>
 </html>
