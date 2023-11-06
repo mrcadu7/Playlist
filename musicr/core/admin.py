@@ -1,5 +1,5 @@
 from django.contrib import admin
-from core.models.playlist import Playlists, Addition, Listener
+from core.models.playlist import Playlists, Addition
 from core.models.music import Song, Album, Artist
 
 
@@ -14,12 +14,6 @@ class PlaylistsAdmin(admin.ModelAdmin):
 class AdditionAdmin(admin.ModelAdmin):
     list_display = ('song', 'playlist', 'created_at')
     list_filter = ('playlist', 'created_at')
-    
-
-@admin.register(Listener)
-class ListenerAdmin(admin.ModelAdmin):
-    list_display = ('user', 'playlist', 'created_at')
-    list_filter = ('user', 'playlist')
     
 
 # MUSICS
