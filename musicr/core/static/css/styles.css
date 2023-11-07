@@ -17,6 +17,26 @@ header {
   font-weight: 800;
 }
 
+.login-buttons {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.login-buttons a {
+  display: inline-block;
+  background-color: #6B2C91; /* Cor roxa escura */
+  color: #F5E5FF; /* Cor de texto clara */
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.login-buttons a:hover {
+  background-color: #5C1F7F; /* Cor roxa mais escura para o hover */
+}
 
 
 .container {
