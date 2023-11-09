@@ -28,8 +28,10 @@
                     <a href="{% url 'view_playlist' playlist.id %}">{{ playlist.title }}</a>
                 {% endif %}
             {% endfor %}
-            <!-- Adicione o formulário de criação de playlist aqui -->
-            <a href="{% url 'create_playlist' %}"><button>Criar Playlist</button></a>
+            {% if user.is_authenticated %}
+                <!-- Adicione o formulário de criação de playlist aqui -->
+                <a href="{% url 'create_playlist' %}"><button>Criar Playlist</button></a>
+            {% endif %}
         </nav>
         <main>
             <form method="post">

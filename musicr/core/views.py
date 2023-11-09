@@ -5,6 +5,7 @@ from core.models.playlist import Playlists, Addition
 from core.models.music import Song
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.decorators import login_required
 
 
 class ArtistNameForm(forms.Form):
@@ -59,7 +60,7 @@ class CreatePlaylistForm(forms.ModelForm):
             playlist.save()
         return playlist
 
-
+@login_required
 def create_playlist(request):
     # Verifique se este é um pedido HTTP POST
     if request.method == 'POST':
