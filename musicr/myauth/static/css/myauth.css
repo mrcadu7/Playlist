@@ -1,0 +1,93 @@
+body {
+    background-color: #000 !important;
+    color: #fff;
+    font-family: 'Figtree', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-buttons {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.login-buttons a {
+    display: inline-block;
+    background-color: #6B2C91;
+    color: #F5E5FF;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.login-buttons a:hover {
+    background-color: #5C1F7F;
+}
+
+form {
+    margin: 0;
+    text-align: center;
+}
+
+form input[type="text"], 
+form input[type="email"],
+form input[type="password"] {
+    padding: 5px;
+    border: 2px solid #6B2C91;
+    border-radius: 20px;
+    font-size: 16px;
+    width: 200px;
+    font-family: 'Figtree', sans-serif;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+
+form button[type="submit"] {
+    background-color: #6B2C91;
+    color: #F5E5FF;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+
+
+form button[type="submit"],
+a button {
+    background-color: #6B2C91;
+    color: #F5E5FF;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px; /* Adiciona uma margem de 10px */
+}
+
+form button[type="submit"]:hover,
+a button:hover {
+    background-color: #5C1F7F;
+}
+
+
+label[for="id_email"],
+label[for="id_username"],
+label[for="id_password"],
+label[for="id_password1"],
+label[for="id_password2"],
+label[for="id_login"] {
+    display: none;
+}
+

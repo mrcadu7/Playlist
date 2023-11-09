@@ -1,32 +1,17 @@
-{% extends "account/base_entrance.html" %}
-{% load allauth i18n socialaccount %}
-{% block head_title %}
-    {% trans "Signup" %}
-{% endblock head_title %}
-{% block content %}
-    {% element h1 %}
-        {% trans "Sign Up" %}
-    {% endelement %}
+{% extends "account/base.html" %}
+{% load allauth account socialaccount %}
+{% block body %}
+    <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
     <p>
-        {% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}
+        Already have an account? Then please <a href="{{ login_url }}">sign in</a>.
     </p>
     {% url 'account_signup' as action_url %}
-    {% element form form=form method="post" action=action_url tags="entrance,signup" %}
-        {% slot body %}
-            {% csrf_token %}
-            {% element fields form=form unlabeled=True %}
-            {% endelement %}
-            {% if redirect_field_value %}
-                <input type="hidden"
-                       name="{{ redirect_field_name }}"
-                       value="{{ redirect_field_value }}" />
-            {% endif %}
-        {% endslot %}
-        {% slot actions %}
-            {% element button tags="prominent,signup" type="submit" %}
-                {% trans "Sign Up" %}
-            {% endelement %}
-        {% endslot %}
-    {% endelement %}
+    <form method="post" action="{{ action_url }}" class="container">
+        {% csrf_token %}
+        {% element fields form=form unlabeled=True %}
+        {% endelement %}
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    <br>
     {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-{% endblock content %}
+{% endblock body %}
