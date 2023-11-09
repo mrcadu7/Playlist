@@ -30,6 +30,58 @@ def autocomplete(request):
     return render(request, 'index.html')
 
 
+class CreatePlaylistForm(forms.ModelForm):
+    # Campos do formulário
+    title = forms.CharField(label='Título', max_length=100)
+    description = forms.CharField(label='Descrição', widget=forms.Textarea)
+
+    class Meta:
+        # Modelo associado ao formulário
+        model = Playlists
+        # Campos que serão exibidos no formulário
+        fields = ['title', 'description']
+        # Opções para o layout do formulário
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        # Inicializa o formulário com o usuário logado
+        self.user = kwargs.pop('user', None)
+        super(CreatePlaylistForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        # Salva o formulário com o usuário associado à playlist
+        playlist = super(CreatePlaylistForm, self).save(commit=False)
+        playlist.user = self.user
+        if commit:
+            playlist.save()
+        return playlist
+
+
+def create_playlist(request):
+    # Verifique se este é um pedido HTTP POST
+    if request.method == 'POST':
+        # Crie uma instância do formulário e preencha com os dados do POST:
+        form = CreatePlaylistForm(request.POST)
+        # Verifique se os dados do formulário são válidos:
+        if form.is_valid():
+            # Salve os dados do formulário, mas não envie para o banco de dados ainda
+            playlist = form.save(commit=False)
+            # Adicione o usuário à playlist
+            playlist.user = request.user
+            # Salve a playlist no banco de dados
+            playlist.save()
+            # Redirecione para a página inicial após a criação da playlist
+            return redirect('index')
+    # Se este é um pedido HTTP GET (ou qualquer outro método), crie o formulário padrão.
+    else:
+        form = CreatePlaylistForm()
+
+    return render(request, 'create_playlist.html', {'form': form})
+
+
 def index(request):
     artist_data = None
     message = None

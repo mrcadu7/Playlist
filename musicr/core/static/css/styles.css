@@ -308,3 +308,62 @@ button:hover {
 .ellipsis:hover + .dropdown-content {
   display: block;
 }
+
+
+.create-playlist-body {
+  background-color: #000 !important;
+  color: #fff;
+  font-family: 'Figtree', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.create-playlist-title {
+  text-align: center;
+  padding: 1px 0;
+  font-family: 'Figtree', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: #F5E5FF;
+}
+
+.create-playlist-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.create-playlist-label {
+  color: #F5E5FF;
+  font-size: 20px;
+}
+
+.create-playlist-input,
+.create-playlist-textarea {
+  background-color: #fff;
+  color: #000;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  width: 80%;
+  max-width: 500px;
+}
+
+.create-playlist-button {
+  background-color: #6B2C91;
+  color: #F5E5FF;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.create-playlist-button:hover {
+  background-color: #5C1F7F;
+}

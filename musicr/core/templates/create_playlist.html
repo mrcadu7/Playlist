@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Criar Playlist</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body class="create-playlist-body">
+    <h2 class="create-playlist-title">Criar Playlist</h2>
+    <form method="post" class="create-playlist-form">
+        {% csrf_token %}
+        <label for="title" class="create-playlist-label">Título:</label><br>
+        <input type="text" id="title" name="title" value="{{ form.title.value|default:'' }}" required class="create-playlist-input"><br>
+        <label for="description" class="create-playlist-label">Descrição:</label><br>
+        <textarea id="description" name="description" required class="create-playlist-textarea">{{ form.description.value|default:'' }}</textarea><br>
+        <button type="submit" class="create-playlist-button">Criar</button>
+    </form>
+</body>
+</html>

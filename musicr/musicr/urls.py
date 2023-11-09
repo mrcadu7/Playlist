@@ -11,5 +11,6 @@ urlpatterns = [
     path('playlists/', views.list_playlists, name='list_playlists'),
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('myauth.urls')),
+    path('create_playlist/', views.create_playlist, name='create_playlist')
 
 ]

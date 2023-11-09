@@ -25,9 +25,11 @@
             {% for playlist in playlists %}
                 <!-- Verifique se a playlist pertence ao usuário -->
                 {% if user == playlist.user %}
-                <a href="{% url 'view_playlist' playlist.id %}">{{ playlist.title }}</a>
+                    <a href="{% url 'view_playlist' playlist.id %}">{{ playlist.title }}</a>
                 {% endif %}
             {% endfor %}
+            <!-- Adicione o formulário de criação de playlist aqui -->
+            <a href="{% url 'create_playlist' %}"><button>Criar Playlist</button></a>
         </nav>
         <main>
             <form method="post">
