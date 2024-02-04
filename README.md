@@ -1,6 +1,7 @@
 # MUSICR
 
 Um humilde criador de playlists para estudos
+Não finalizado, porém não abandonado.
 
 
 ## Como funciona?
